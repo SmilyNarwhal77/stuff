@@ -18,5 +18,156 @@
       </article>
       <article></article>
     </main>
+    <script>
+      def Prime_Checker_Result():
+    global FactorList, FactorCount, FactorListPrint, Composite, NegativeNumber, PrimeCheckInput1or0
+    if Composite == True:
+        game.splash("" + str(InputNumber) + " is composite.")
+        FactorList = ""
+        FactorCount = len(Factors)
+        for index in range(FactorCount):
+            FactorList = "" + FactorList + str(Factors.shift()) + "^(" + str(NumberOfEachFactor.shift()) + "), "
+        FactorListPrint = "The factors of " + str(InputNumber) + " are: " + FactorList.substr(0, len(FactorList) - 2) + "."
+        game.show_long_text(FactorListPrint, DialogLayout.BOTTOM)
+        Composite = False
+    elif NegativeNumber == True:
+        game.splash("Error: " + str(InputNumber) + " is negative.")
+        NegativeNumber = False
+    elif PrimeCheckInput1or0 == True:
+        game.splash("1 and 0 are neither prime nor composite numbers.")
+        PrimeCheckInput1or0 = False
+    else:
+        game.splash("" + str(InputNumber) + " is prime.")
+    Prime_Checker__Factors()
+def Factorise(Number2: number):
+    global FactorisingInProgress
+    FactorisingInProgress = Number2
+    while FactorisingInProgress != 1:
+        index2 = 0
+        while index2 <= FactorisingInProgress - 2:
+            if FactorisingInProgress % (index2 + 2) == 0:
+                FactorisingInProgress = FactorisingInProgress / (index2 + 2)
+                if ListContain(index2 + 2) >= 0:
+                    NumberOfEachFactor[ListPosition] = NumberOfEachFactor[ListPosition] + 1
+                else:
+                    Factors.append(index2 + 2)
+                    NumberOfEachFactor.append(1)
+                break
+            index2 += 1
+    Prime_Checker_Result()
+def YN(Function: str):
+    return game.ask(Function)
+def HCF():
+    global HCF1, HCF2, LowerHCF, HCFcheckNumber, HCFanswer
+    HCF1 = game.ask_for_number("Enter the first number:", 10)
+    HCF2 = game.ask_for_number("Enter the second number:", 10)
+    LowerHCF = min(HCF1, HCF2)
+    index3 = 0
+    while index3 <= LowerHCF - 1:
+        HCFcheckNumber = LowerHCF - index3
+        if HCF1 % HCFcheckNumber == 0 and HCF2 % HCFcheckNumber == 0:
+            HCFanswer = HCFcheckNumber
+            break
+        HCFcheckNumber = 0
+        index3 += 1
+    HCFresult()
+def HCFresult():
+    global HCF1, HCF2, LowerHCF
+    game.show_long_text("The HCF of " + str(HCF1) + " and " + str(HCF2) + " is:" + str(HCFanswer),
+        DialogLayout.CENTER)
+    HCF1 = 0
+    HCF2 = 0
+    LowerHCF = 0
+    HCF()
+def Prime_Checker__Factors():
+    global InputNumber, Factors, NumberOfEachFactor, NegativeNumber, PrimeCheckInput1or0, Composite
+    InputNumber = game.ask_for_number("Please input number for checking:", 10)
+    Factors = []
+    NumberOfEachFactor = []
+    if InputNumber < 0:
+        NegativeNumber = True
+        Prime_Checker_Result()
+    if InputNumber == 0 or InputNumber == 1:
+        PrimeCheckInput1or0 = True
+        Prime_Checker_Result()
+    index4 = 0
+    while index4 <= InputNumber - 3:
+        if InputNumber % (index4 + 2) == 0:
+            Composite = True
+            break
+        index4 += 1
+    if Composite == True:
+        Factorise(InputNumber)
+    Prime_Checker_Result()
+def LCM():
+    global LCM1, LCM2, LCMcheckNumber
+    LCM1 = game.ask_for_number("Enter the first number:", 10)
+    LCM2 = game.ask_for_number("Enter the second number:", 10)
+    LCMcheckNumber = 1
+    while not (LCMcheckNumber % LCM1 == 0 and LCMcheckNumber % LCM2 == 0):
+        LCMcheckNumber += 1
+    LCMresult()
+def ListContain(ListNumber: number):
+    global ListPosition
+    ListPosition = Factors.index(ListNumber)
+    return ListPosition
+def FunctionChoice():
+    global Function2
+    game.show_long_text("Enter 0 to display options again. Enter \"1\" for Prime Checker + Factors. Enter \"2\" for HCF. Enter \"3\" for LCM.",
+        DialogLayout.FULL)
+    Function2 = game.ask_for_number("Please select function.", 1)
+    game.splash("Confirm?")
+    if Function2 == 0:
+        FunctionChoice()
+    elif Function2 == 1:
+        if YN("Prime Checker + Factors?"):
+            Prime_Checker__Factors()
+        else:
+            game.splash("Choose another function.")
+            FunctionChoice()
+    elif Function2 == 2:
+        if YN("HCF?"):
+            HCF()
+        else:
+            game.splash("Choose another function.")
+            FunctionChoice()
+    elif Function2 == 3:
+        if YN("LCM?"):
+            LCM()
+        else:
+            game.splash("Choose another function.")
+            FunctionChoice()
+    else:
+        game.splash("Error: That is not an option.")
+def LCMresult():
+    global LCM1, LCM2, LCMcheckNumber
+    game.show_long_text("The LCM of " + str(LCM1) + " and " + str(LCM2) + " is:" + str(LCMcheckNumber),
+        DialogLayout.CENTER)
+    LCM1 = 0
+    LCM2 = 0
+    LCMcheckNumber = 0
+    LCM()
+Function2 = 0
+LCMcheckNumber = 0
+LCM2 = 0
+LCM1 = 0
+HCFanswer = 0
+HCFcheckNumber = 0
+LowerHCF = 0
+HCF2 = 0
+HCF1 = 0
+ListPosition = 0
+FactorisingInProgress = 0
+FactorListPrint = ""
+NumberOfEachFactor: List[number] = []
+Factors: List[number] = []
+FactorCount = 0
+FactorList = ""
+InputNumber = 0
+PrimeCheckInput1or0 = False
+NegativeNumber = False
+Composite = False
+FunctionChoice()
+    </script>
   </body>
 </html>
